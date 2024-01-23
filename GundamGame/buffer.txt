@@ -1,0 +1,49 @@
+package main
+
+import (
+    "log"
+    "net/http"
+    "github.com/gorilla/websocket"
+)
+
+var upgrader = websocket.Upgrader{
+    CheckOrigin: func(r *http.Request) bool {
+        return true // Adjust this for production
+    },
+}
+
+func handleConnections(w http.ResponseWriter, r *http.Request) {
+    // Upgrade initial GET request to a WebSocket connection
+    ws, err := upgrader.Upgrade(w, r, nil)
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer ws.Close()
+
+    // Main loop: listen for incoming messages
+    for {
+        var msg string
+        // Read in a new message as JSON and map it to a Message object
+        err := ws.ReadJSON(&msg)
+        if err != nil {
+            log.Printf("Error reading json: %v", err)
+            break
+        }
+        log.Printf("Received: %s", msg)
+
+        // Broadcast the message to all connected clients
+        // (You need to implement client management, e.g., using a map of clients)
+    }
+}
+
+func main() {
+    // Configure WebSocket route
+    http.HandleFunc("/ws", handleConnections)
+
+    // Start the server on localhost port 8080 and log any errors
+    log.Println("WebSocket server started on :8080")
+    err := http.ListenAndServe(":8080", nil)
+    if err != nil {
+        log.Fatal("ListenAndServe: ", err)
+    }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "gundamgame",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/script/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc && npx fix-esm-import-path dist/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "fix-esm-import-path": "^1.5.0"
+  }
+}
